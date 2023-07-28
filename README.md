@@ -22,6 +22,12 @@ python start/main.py -host <host> -db <dbname> -u <username> -p <password>
 1. Change the version in `pyproject.toml`.
 2. Commit and push the changes.
 3. Create a tag with the version and push it to the remote repository.
+
+```shell
+git tag v<major>.<minor>.<patch>
+git push origin v<major>.<minor>.<patch>
+```
+
 4. Build and publish the package to PyPI:
 
 ```shell
