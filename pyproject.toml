@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "greptime_cloud_quick_start"
+version = "1.0.0"
+authors = [
+  { name="CUI YIRAN", email="cuiyiran3@gmail.com" },
+]
+description = "A quick start demo for GreptimeCloud"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "opentelemetry-api==1.19.0",
+    "opentelemetry-exporter-otlp-proto-http==1.19.0",
+    "opentelemetry-instrumentation==0.40b0",
+    "opentelemetry-instrumentation-system-metrics==0.40b0",
+    "opentelemetry-proto==1.19.0",
+    "opentelemetry-sdk==1.19.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/GreptimeCloudStarters/quick-start-python"
+"Bug Tracker" = "https://github.com/GreptimeCloudStarters/quick-start-python/issues"
+
+[project.scripts]
+greptime_cloud_quick_start = "start.main:main"
+
+[tool.setuptools.packages]
+find = {}  # Scanning implicit namespaces is active by default
+
