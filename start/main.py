@@ -44,7 +44,7 @@ def main():
         headers={"Authorization": f"Basic {b64_auth}", "x-greptime-db-name": db},
         timeout=5)
     # exporter = ConsoleMetricExporter()
-    metric_reader = PeriodicExportingMetricReader(exporter, 2000)
+    metric_reader = PeriodicExportingMetricReader(exporter, 5000)
     provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
 
     # Sets the global default meter provider
