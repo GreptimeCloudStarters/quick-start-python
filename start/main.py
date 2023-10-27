@@ -19,10 +19,10 @@ def main():
                         prog='greptime-cloud-quick-start-python',
                         description='Quick start Python demo for greptime cloud')
 
-    parser.add_argument('-host', required=True, help='The host address of the GreptimeCloud service')
-    parser.add_argument('-db', '--database', required=True, help='The database of the GreptimeCloud service')
-    parser.add_argument('-u', '--username', required=True, help='The username of the database')
-    parser.add_argument('-p', '--password', required=True, help='The password of the database')
+    parser.add_argument('-host', default="localhost", help='The host address of the GreptimeDB')
+    parser.add_argument('-db', '--database', default="public", help='The database of the GreptimeDB')
+    parser.add_argument('-u', '--username', help='The username of the database')
+    parser.add_argument('-p', '--password', help='The password of the database')
     args = parser.parse_args()
     host = args.host
     db = args.database
@@ -37,7 +37,10 @@ def main():
         SERVICE_NAME: "quick-start-python"
     })
 
-    endpoint = f"https://{host}/v1/otlp/v1/metrics"
+    if host == "localhost" or host == "127.0.0.1":
+        endpoint = f"http://{host}:4000/v1/otlp/v1/metrics"
+    else:
+        endpoint = f"https://{host}/v1/otlp/v1/metrics"
 
     exporter = OTLPMetricExporter(
         endpoint=endpoint,
