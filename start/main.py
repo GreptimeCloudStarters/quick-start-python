@@ -23,11 +23,16 @@ def main():
     parser.add_argument('-db', '--database', default="public", help='The database of the GreptimeDB')
     parser.add_argument('-u', '--username', help='The username of the database')
     parser.add_argument('-p', '--password', help='The password of the database')
+    parser.add_argument('-P', '--port', help='The port of the HTTP endpoint of GreptimeDB')
+    parser.add_argument('--security', action=argparse.BooleanOptionalAction, default=True, help='Whether to use secure connection to GreptimeDB')
+    
     args = parser.parse_args()
     host = args.host
     db = args.database
     username = args.username
     password = args.password
+    security = args.security
+    port = args.port
 
     auth = f"{username}:{password}"
     b64_auth = base64.b64encode(auth.encode()).decode("ascii")
@@ -37,13 +42,22 @@ def main():
         SERVICE_NAME: "quick-start-python"
     })
 
-    if host == "localhost" or host == "127.0.0.1":
-        endpoint = f"http://{host}:4000/v1/otlp/v1/metrics"
+    protocol = ""
+    if security:
+        protocol = "https://"
     else:
-        endpoint = f"https://{host}/v1/otlp/v1/metrics"
-
+        protocol = "http://"
+    
+    url = ""
+    if port:
+        url = f"{protocol}{host}:{port}"
+    else:
+        url = f"{protocol}{host}"
+    
+    url = url + f"/v1/otlp/v1/metrics"
+    print(url)
     exporter = OTLPMetricExporter(
-        endpoint=endpoint,
+        endpoint=url,
         headers={"Authorization": f"Basic {b64_auth}", "x-greptime-db-name": db},
         timeout=5)
     # exporter = ConsoleMetricExporter()
