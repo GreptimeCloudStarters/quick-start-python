@@ -24,14 +24,14 @@ def main():
     parser.add_argument('-u', '--username', help='The username of the database')
     parser.add_argument('-p', '--password', help='The password of the database')
     parser.add_argument('-P', '--port', help='The port of the HTTP endpoint of GreptimeDB')
-    parser.add_argument('--security', action=argparse.BooleanOptionalAction, default=True, help='Whether to use secure connection to GreptimeDB')
+    parser.add_argument('--secure', action=argparse.BooleanOptionalAction, default=True, help='Whether to use secure connection to GreptimeDB')
     
     args = parser.parse_args()
     host = args.host
     db = args.database
     username = args.username
     password = args.password
-    security = args.security
+    secure = args.secure
     port = args.port
 
     auth = f"{username}:{password}"
@@ -43,7 +43,7 @@ def main():
     })
 
     protocol = ""
-    if security:
+    if secure:
         protocol = "https://"
     else:
         protocol = "http://"
@@ -55,7 +55,7 @@ def main():
         url = f"{protocol}{host}"
     
     url = url + f"/v1/otlp/v1/metrics"
-    print(url)
+
     exporter = OTLPMetricExporter(
         endpoint=url,
         headers={"Authorization": f"Basic {b64_auth}", "x-greptime-db-name": db},
