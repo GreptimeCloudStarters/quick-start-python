@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "greptime_cloud_quick_start"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
   { name="CUI YIRAN", email="cuiyiran3@gmail.com" },
 ]

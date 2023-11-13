@@ -19,15 +19,20 @@ def main():
                         prog='greptime-cloud-quick-start-python',
                         description='Quick start Python demo for greptime cloud')
 
-    parser.add_argument('-host', required=True, help='The host address of the GreptimeCloud service')
-    parser.add_argument('-db', '--database', required=True, help='The database of the GreptimeCloud service')
-    parser.add_argument('-u', '--username', required=True, help='The username of the database')
-    parser.add_argument('-p', '--password', required=True, help='The password of the database')
+    parser.add_argument('-host', default="localhost", help='The host address of the GreptimeDB')
+    parser.add_argument('-db', '--database', default="public", help='The database of the GreptimeDB')
+    parser.add_argument('-u', '--username', help='The username of the database')
+    parser.add_argument('-p', '--password', help='The password of the database')
+    parser.add_argument('-P', '--port', help='The port of the HTTP endpoint of GreptimeDB')
+    parser.add_argument('--secure', action=argparse.BooleanOptionalAction, default=True, help='Whether to use secure connection to GreptimeDB')
+    
     args = parser.parse_args()
     host = args.host
     db = args.database
     username = args.username
     password = args.password
+    secure = args.secure
+    port = args.port
 
     auth = f"{username}:{password}"
     b64_auth = base64.b64encode(auth.encode()).decode("ascii")
@@ -37,10 +42,22 @@ def main():
         SERVICE_NAME: "quick-start-python"
     })
 
-    endpoint = f"https://{host}/v1/otlp/v1/metrics"
+    protocol = ""
+    if secure:
+        protocol = "https://"
+    else:
+        protocol = "http://"
+    
+    url = ""
+    if port:
+        url = f"{protocol}{host}:{port}"
+    else:
+        url = f"{protocol}{host}"
+    
+    url = url + f"/v1/otlp/v1/metrics"
 
     exporter = OTLPMetricExporter(
-        endpoint=endpoint,
+        endpoint=url,
         headers={"Authorization": f"Basic {b64_auth}", "x-greptime-db-name": db},
         timeout=5)
     # exporter = ConsoleMetricExporter()
