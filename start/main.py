@@ -24,15 +24,25 @@ def main():
     parser.add_argument('-u', '--username', help='The username of the database')
     parser.add_argument('-p', '--password', help='The password of the database')
     parser.add_argument('-P', '--port', help='The port of the HTTP endpoint of GreptimeDB')
-    parser.add_argument('--secure', action=argparse.BooleanOptionalAction, default=True, help='Whether to use secure connection to GreptimeDB')
+    parser.add_argument('-e', '--endpoint', help='The HTTP endpoint of OTLP/HTTP exporter')
     
     args = parser.parse_args()
+    endpoint = args.endpoint
     host = args.host
     db = args.database
     username = args.username
     password = args.password
-    secure = args.secure
     port = args.port
+
+    url = ""
+    if endpoint:
+        url = endpoint
+    else:
+        if port:
+            url = f"https://{host}:{port}"
+        else:
+            url = f"https://{host}"
+        url = url + f"/v1/otlp/v1/metrics"
 
     auth = f"{username}:{password}"
     b64_auth = base64.b64encode(auth.encode()).decode("ascii")
@@ -41,20 +51,6 @@ def main():
     resource = Resource(attributes={
         SERVICE_NAME: "quick-start-python"
     })
-
-    protocol = ""
-    if secure:
-        protocol = "https://"
-    else:
-        protocol = "http://"
-    
-    url = ""
-    if port:
-        url = f"{protocol}{host}:{port}"
-    else:
-        url = f"{protocol}{host}"
-    
-    url = url + f"/v1/otlp/v1/metrics"
 
     exporter = OTLPMetricExporter(
         endpoint=url,

@@ -7,14 +7,14 @@ This is a quick start demo for [GreptimeCloud](https://greptime.cloud/). It coll
 Use the following command line to start it in Python 3.10+ without cloning the repo:
 
 ```shell
-pipx run --no-cache greptime-cloud-quick-start -host <host> -db <dbname> -u <username> -p <password>
+pipx run --no-cache greptime-cloud-quick-start -e <endpoint-url> -db <dbname> -u <username> -p <password>
 ```
 
 Or you can clone the repo and run it:
 
 ```shell
 pip install -r requirements.txt
-python start/main.py -host <host> -db <dbname> -u <username> -p <password>
+python start/main.py -e <endpoint-url> -db <dbname> -u <username> -p <password>
 ```
 
 ## Release
